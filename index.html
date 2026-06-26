@@ -4,15 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>石川原 吉美 | Game Programmer Portfolio</title>
+
+  <!-- Google Fonts 読み込み -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- 自作CSSの読み込み -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- NAV -->
+  <!-- ==========================================
+     GAME LOADING SCREEN
+     ========================================== -->
+<div id="loading-screen">
+
+  <div class="loading-container">
+
+    <h1 class="loading-title">
+      YOSHI'S PORTFOLIO
+    </h1>
+
+    <p class="loading-sub">
+      GAME PROGRAMMER
+    </p>
+
+    <div class="loading-status">
+      <span id="loading-text">
+        Initializing...
+      </span>
+    </div>
+
+    <div class="loading-bar">
+      <div id="loading-progress"></div>
+    </div>
+
+    <div class="loading-percent">
+      <span id="loading-percent">0%</span>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ==========================================
+   ナビゲーションバー
+   ========================================== -->
 <nav>
-  <div class="nav-logo">YOSHI.DEV</div>
+  <div class="nav-logo">YOSHI'S.PORTFOLIO</div>
   <ul class="nav-links">
     <li><a href="#about">ABOUT</a></li>
     <li><a href="#skills">SKILLS</a></li>
@@ -21,80 +60,111 @@
   </ul>
 </nav>
 
-<!-- HERO -->
+<!-- ==========================================
+   ヒーローセクション（トップ）
+   ========================================== -->
 <section id="hero">
+  <!-- 背景グリッド（CSSでアニメーション） -->
   <div class="hero-grid-bg"></div>
+  <!-- 星のコンテナ（JSで星を生成） -->
   <div class="hero-stars" id="stars"></div>
 
+  <!-- タグ（GAME PROGRAMMER） -->
   <p class="hero-tag">GAME PROGRAMMER</p>
+  <!-- 名前（姓と名で色分け） -->
   <h1 class="hero-name">石川原 <span>吉美</span></h1>
+  <!-- ローマ字名 -->
   <p class="hero-sub">ISHIKAWAHARA YOSHIMI</p>
+  <!-- 自己紹介文 -->
   <p class="hero-bio">
     横浜デジタルアーツ専門学校 ゲーム科 3年。<br>
     Unityを中心にゲームロジック設計・システム実装を得意とする<br>
     ゲームプログラマー志望。
   </p>
+  <!-- ボタン（WORKS / CONTACT） -->
   <div>
     <a href="#works" class="btn-pixel">WORKS →</a>
     <a href="#contact" class="btn-pixel btn-outline">CONTACT</a>
   </div>
 </section>
 
-<!-- ABOUT -->
+<!-- ==========================================
+   ABOUT セクション（文章は前回のまま、レイアウトは今回のまま）
+   ========================================== -->
 <section id="about">
-  <h2 class="section-title">ABOUT ME</h2>
-  <div class="about-grid reveal">
+  <div class="container">
+    <h2 class="section-title">ABOUT ME</h2>
+    <div class="about-grid">
+      <!-- 左：プレイヤーカード（前回の内容） -->
+      <div class="player-card">
+        <div class="player-avatar">🎮</div>
+        <p class="player-name">YOSHIMI</p>
+        <p class="player-class">GAME PROGRAMMER</p>
+        <div class="stat-row"><span>生年月日</span><span class="stat-val">2005.09.30</span></div>
+        <div class="stat-row"><span>学校</span><span class="stat-val">横浜デジタルアーツ専門学校</span></div>
+        <div class="stat-row"><span>学年</span><span class="stat-val">3年生</span></div>
+        <div class="stat-row"><span>得意分野</span><span class="stat-val">GAME LOGIC</span></div>
+      </div>
 
-    <div class="player-card">
-      <div class="player-avatar">🎮</div>
-      <p class="player-name">YOSHIMI</p>
-      <p class="player-class">GAME PROGRAMMER</p>
-      <div class="stat-row"><span>生年月日</span><span class="stat-val">2005.09.30</span></div>
-      <div class="stat-row"><span>学校</span><span class="stat-val">YDA GAME Dept.</span></div>
-      <div class="stat-row"><span>学年</span><span class="stat-val">3年生</span></div>
-      <div class="stat-row"><span>得意分野</span><span class="stat-val">GAME LOGIC</span></div>
-    </div>
+      <!-- 右：プロフィール本文（今回のレイアウト、前回の文章） -->
+      <div class="about-text">
+        <h3>PROFILE</h3>
+        <p>
+          ゲームロジック設計とシステム実装を得意としています。Unityを使ったゲーム開発を中心に、
+          プレイヤー操作・入力管理・ゲーム進行管理など、ゲームの根幹となるシステムの設計・実装を
+          経験してきました。チーム開発でも責務分離やデバッグを意識した、保守しやすいコードを
+          書くことを心がけています。
+        </p>
 
-    <div class="about-text">
-      <h3>// PROFILE</h3>
-      <p>
-        ゲームロジック設計とシステム実装を得意としています。Unityを使ったゲーム開発を中心に、
-        プレイヤー操作・入力管理・ゲーム進行管理など、ゲームの根幹となるシステムの設計・実装を
-        経験してきました。チーム開発でも責務分離やデバッグを意識した、保守しやすいコードを
-        書くことを心がけています。
-      </p>
+        <!-- LIKES は表形式（今回のレイアウト）＋前回の内容を整理 -->
+        <h3>LIKES</h3>
+        <div class="table-grid">
+          <div class="table-row">
+            <div class="table-cell">GAME</div>
+            <div class="table-cell">Marvel's Spider-Man / ラチェット&クランク / CrossFire / Adventure Quest Worlds / ドッカンバトル / 星ドラ / ストリートファイター6 / スマブラ / OW2 / 7Days To Die</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">HOBBY</div>
+            <div class="table-cell">ゲーム / 漫画 / 映画鑑賞 / 昼寝</div>
+          </div>
+        </div>
 
-      <h3>// LIKES</h3>
-      <p>
-        趣味はゲーム・漫画・映画鑑賞・昼寝。好きなゲームは Marvel's Spider-Man、
-        ラチェット＆クランク、CrossFire、ストリートファイター6、スマブラ、OW2 など幅広く。
-      </p>
+        <!-- LANG & TOOLS は表形式（今回のレイアウト）＋前回の内容を整理 -->
+        <h3>LANGUAGES & TOOLS</h3>
+        <div class="table-grid">
+          <div class="table-row">
+            <div class="table-cell">LANGUAGE</div>
+            <div class="table-cell">C / C++ / C# / HTML/CSS / PHP / SQL</div>
+          </div>
+          <div class="table-row">
+            <div class="table-cell">ENGINE&IDE</div>
+            <div class="table-cell">Unity / Unreal Engine 4 / Visual Studio / VS Code / GitHub</div>
+          </div>
+        </div>
 
-      <h3>// LANG &amp; TOOLS</h3>
-      <div class="tag-cloud">
-        <span class="tag">C</span>
-        <span class="tag">C++</span>
-        <span class="tag">C#</span>
-        <span class="tag">HTML/CSS</span>
-        <span class="tag">PHP</span>
-        <span class="tag">SQL</span>
-        <span class="tag green">Unity</span>
-        <span class="tag green">UE4</span>
-        <span class="tag green">Visual Studio</span>
-        <span class="tag green">VS Code</span>
-        <span class="tag green">GitHub</span>
-        <span class="tag yellow">CGクリエイター検定ベーシック</span>
-        <span class="tag yellow">情報処理活用能力検定3級</span>
+        <!-- CERTIFICATIONS は今回の表形式＋前回の資格内容 -->
+        <h3>CERTIFICATIONS</h3>
+        <div class="table-grid">
+          <div class="table-cell">
+            CGクリエイター検定ベーシック / 情報処理活用能力検定 3級
+          </div>
+        </div>
+        </div>
+        </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- SKILLS -->
+<!-- ==========================================
+   SKILLS セクション
+   ========================================== -->
 <section id="skills">
   <h2 class="section-title">SKILL STATS</h2>
   <div class="skills-grid reveal">
 
+    <!-- 言語スキルカード -->
     <div class="skill-card">
       <p class="skill-card-title">// LANGUAGE</p>
       <div class="skill-item">
@@ -115,6 +185,7 @@
       </div>
     </div>
 
+    <!-- エンジン・IDEスキルカード -->
     <div class="skill-card">
       <p class="skill-card-title">// ENGINE / IDE</p>
       <div class="skill-item">
@@ -135,6 +206,7 @@
       </div>
     </div>
 
+    <!-- 資格カード -->
     <div class="skill-card">
       <p class="skill-card-title">// CERTIFICATION</p>
       <div class="skill-cert">CGクリエイター検定ベーシック</div>
@@ -144,10 +216,13 @@
   </div>
 </section>
 
-<!-- WORKS -->
+<!-- ==========================================
+   WORKS セクション
+   ========================================== -->
 <section id="works">
   <h2 class="section-title">WORKS</h2>
 
+  <!-- フィルターバー（JSでクリックイベントを付与） -->
   <div class="filter-bar">
     <button class="filter-btn active" data-filter="all">ALL</button>
     <button class="filter-btn" data-filter="solo">SOLO</button>
@@ -157,6 +232,7 @@
     <button class="filter-btn" data-filter="wip">制作中</button>
   </div>
 
+  <!-- 作品グリッド（JSでフィルタリング対象） -->
   <div class="works-grid reveal" id="works-grid">
 
     <!-- 1. MACHINA PARTY -->
@@ -371,7 +447,9 @@
   </div>
 </section>
 
-<!-- CONTACT -->
+<!-- ==========================================
+   CONTACT セクション
+   ========================================== -->
 <section id="contact">
   <h2 class="section-title">CONTACT</h2>
   <div class="contact-box px-corner reveal">
@@ -387,11 +465,18 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ==========================================
+   FOOTER
+   ========================================== -->
 <footer>
   &copy; 2026 ISHIKAWAHARA YOSHIMI — GAME PROGRAMMER PORTFOLIO
 </footer>
 
+<!-- 効果音（不要なら削除可） -->
+<audio id="start-se"></audio>
+
+<!-- JavaScript -->
 <script src="js/main.js"></script>
+
 </body>
 </html>
