@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>石川原 吉美 | Game Programmer Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --px-black:   #0a0a0f;
+    --px-navy:    #0d1b2a;
+    --px-blue:    #1b3a6b;
+    --px-cyan:    #00e5ff;
+    --px-green:   #39ff14;
+    --px-yellow:  #ffe135;
+    --px-orange:  #ff7c00;
+    --px-white:   #e8eaf6;
+    --px-gray:    #546e7a;
+    --px-card:    #0f1f35;
+    --font-pixel: 'Press Start 2P', monospace;
+    --font-body:  'Noto Sans JP', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--px-black);
+    color: var(--px-white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect x='0' y='0' width='8' height='8' fill='%2300e5ff'/%3E%3Crect x='8' y='8' width='8' height='8' fill='%2300e5ff'/%3E%3C/svg%3E") 4 4, crosshair;
+  }
+
+  /* ===== SCANLINE OVERLAY ===== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.15) 2px,
+      rgba(0,0,0,0.15) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ===== PIXEL BORDER UTIL ===== */
+  .px-border {
+    border: 3px solid var(--px-cyan);
+    box-shadow: 4px 4px 0 var(--px-blue), inset 0 0 20px rgba(0,229,255,0.08);
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.92);
+    border-bottom: 2px solid var(--px-cyan);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 5vw;
+    backdrop-filter: blur(6px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    color: var(--px-cyan);
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--px-cyan);
+  }
+
+  .nav-links { display: flex; gap: 20px; list-style: none; }
+  .nav-links a {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--px-white);
+    text-decoration: none;
+    padding: 6px 10px;
+    transition: color .15s, background .15s;
+  }
+  .nav-links a:hover {
+    color: var(--px-black);
+    background: var(--px-cyan);
+  }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 100px 5vw 60px;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.07) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove { from { transform: translateY(0); } to { transform: translateY(40px); } }
+
+  .hero-stars {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    width: 4px; height: 4px;
+    background: var(--px-white);
+    animation: blink 2s infinite;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .hero-tag {
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--px-green);
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .hero-tag::before { content: '> '; color: var(--px-gray); }
+
+  .hero-name {
+    font-family: var(--font-pixel);
+    font-size: clamp(22px, 4.5vw, 52px);
+    color: var(--px-white);
+    line-height: 1.4;
+    position: relative;
+    text-shadow: 3px 3px 0 var(--px-blue);
+    margin-bottom: 10px;
+  }
+  .hero-name span { color: var(--px-cyan); text-shadow: 0 0 20px var(--px-cyan), 3px 3px 0 var(--px-blue); }
+
+  .hero-sub {
+    font-family: var(--font-pixel);
+    font-size: clamp(9px, 1.5vw, 13px);
+    color: var(--px-yellow);
+    margin-bottom: 36px;
+    position: relative;
+    letter-spacing: 2px;
+  }
+
+  .hero-bio {
+    max-width: 600px;
+    font-size: 14px;
+    line-height: 1.9;
+    color: #b0bec5;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .btn-pixel {
+    display: inline-block;
+    font-family: var(--font-pixel);
+    font-size: 9px;
+    color: var(--px-black);
+    background: var(--px-cyan);
+    padding: 14px 28px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: transform .1s;
+    box-shadow: 4px 4px 0 var(--px-blue);
+    letter-spacing: 1px;
+  }
+  .btn-pixel:hover { transform: translate(-2px,-2px); box-shadow: 6px 6px 0 var(--px-blue); }
+  .btn-pixel:active { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--px-blue); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--px-cyan);
+    border: 3px solid var(--px-cyan);
+    box-shadow: 4px 4px 0 var(--px-blue);
+    margin-left: 16px;
+  }
+  .btn-outline:hover { background: rgba(0,229,255,0.1); }
+
+  /* ===== SECTION COMMON ===== */
+  section { padding: 80px 5vw; }
+  .section-title {
+    font-family: var(--font-pixel);
+    font-size: clamp(13px, 2.5vw, 20px);
+    color: var(--px-cyan);
+    text-align: center;
+    margin-bottom: 60px;
+    position: relative;
+    text-shadow: 0 0 15px var(--px-cyan);
+    letter-spacing: 2px;
+  }
+  .section-title::before { content: '■ '; color: var(--px-green); }
+  .section-title::after  { content: ' ■'; color: var(--px-green); }
+
+  /* ===== ABOUT ===== */
+  #about { background: var(--px-navy); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 48px;
+    max-width: 960px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .player-card {
+    background: var(--px-card);
+    border: 3px solid var(--px-green);
+    box-shadow: 6px 6px 0 rgba(57,255,20,0.3);
+    padding: 28px;
+    text-align: center;
+  }
+  .player-avatar {
+    width: 100px; height: 100px;
+    margin: 0 auto 16px;
+    background: var(--px-blue);
+    border: 3px solid var(--px-cyan);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-pixel);
+    font-size: 28px;
+    color: var(--px-cyan);
+    position: relative;
+    overflow: hidden;
+  }
+  .player-avatar::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--px-cyan);
+    animation: scan 2s linear infinite;
+  }
+  @keyframes scan { from { bottom: 100%; } to { bottom: 0; } }
+
+  .player-name {
+    font-family: var(--font-pixel);
+    font-size: 11px;
+    color: var(--px-yellow);
+    margin-bottom: 6px;
+  }
+  .player-class {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--px-green);
+    margin-bottom: 18px;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #b0bec5;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0,229,255,0.15);
+  }
+  .stat-row:last-child { border-bottom: none; }
+  .stat-val {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--px-cyan);
+  }
+
+  .about-text h3 {
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    color: var(--px-yellow);
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+  }
+  .about-text p {
+    font-size: 14px;
+    line-height: 1.9;
+    color: #b0bec5;
+    margin-bottom: 24px;
+  }
+
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .tag {
+    font-family: var(--font-pixel);
+    font-size: 7px;
+    padding: 5px 10px;
+    border: 2px solid var(--px-cyan);
+    color: var(--px-cyan);
+    background: rgba(0,229,255,0.08);
+    white-space: nowrap;
+  }
+  .tag.green { border-color: var(--px-green); color: var(--px-green); background: rgba(57,255,20,0.08); }
+  .tag.yellow { border-color: var(--px-yellow); color: var(--px-yellow); background: rgba(255,225,53,0.08); }
+
+  /* ===== SKILLS ===== */
+  #skills { background: var(--px-black); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .skill-card {
+    background: var(--px-card);
+    border: 2px solid var(--px-blue);
+    padding: 24px;
+    position: relative;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .skill-card:hover {
+    border-color: var(--px-cyan);
+    box-shadow: 0 0 20px rgba(0,229,255,0.2);
+  }
+  .skill-card-title {
+    font-family: var(--font-pixel);
+    font-size: 8px;
+    color: var(--px-cyan);
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+  }
+  .skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  .skill-item-name { font-size: 13px; color: var(--px-white); }
+  .skill-bar-wrap {
+    width: 100px;
+    height: 8px;
+    background: var(--px-blue);
+    border: 1px solid var(--px-gray);
+    position: relative;
+    overflow: hidden;
+  }
+  .skill-bar {
+    height: 100%;
+    background: var(--px-cyan);
+    animation: fillBar .8s ease-out both;
+  }
+  @keyframes fillBar { from { width: 0 !important; } }
+
+  .skill-cert {
+    font-size: 12px;
+    color: #b0bec5;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0,229,255,0.1);
+  }
+  .skill-cert:last-child { border-bottom: none; }
+  .skill-cert::before { content: '◆ '; color: var(--px-yellow); font-size: 9px; }
+
+  /* ===== WORKS ===== */
+  #works { background: var(--px-navy); }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 48px;
+  }
+  .filter-btn {
+    font-family: var(--font-pixel);
+    font-size: 7px;
+    padding: 8px 14px;
+    background: transparent;
+    color: var(--px-gray);
+    border: 2px solid var(--px-gray);
+    cursor: pointer;
+    transition: all .15s;
+    letter-spacing: 1px;
+  }
+  .filter-btn:hover,
+  .filter-btn.active {
+    color: var(--px-black);
+    background: var(--px-cyan);
+    border-color: var(--px-cyan);
+    box-shadow: 3px 3px 0 var(--px-blue);
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .work-card {
+    background: var(--px-card);
+    border: 2px solid var(--px-blue);
+    position: relative;
+    overflow: hidden;
+    transition: border-color .2s, transform .2s;
+    cursor: pointer;
+  }
+  .work-card:hover {
+    border-color: var(--px-cyan);
+    transform: translate(-3px, -3px);
+    box-shadow: 6px 6px 0 var(--px-blue);
+  }
+  .work-card.hidden { display: none; }
+
+  .work-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-family: var(--font-pixel);
+    font-size: 6px;
+    padding: 4px 8px;
+    z-index: 2;
+  }
+  .badge-wip { background: var(--px-orange); color: var(--px-black); }
+  .badge-done { background: var(--px-green); color: var(--px-black); }
+  .badge-team { background: var(--px-yellow); color: var(--px-black); }
+
+  .work-thumb {
+    width: 100%;
+    height: 140px;
+    background: var(--px-blue);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-pixel);
+    font-size: 28px;
+    color: var(--px-cyan);
+    border-bottom: 2px solid var(--px-blue);
+    position: relative;
+    overflow: hidden;
+  }
+  .work-thumb-label {
+    position: absolute;
+    bottom: 8px; left: 12px;
+    font-family: var(--font-pixel);
+    font-size: 6px;
+    color: rgba(0,229,255,0.6);
+  }
+
+  .work-body { padding: 20px; }
+  .work-title {
+    font-family: var(--font-pixel);
+    font-size: 10px;
+    color: var(--px-yellow);
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .work-desc {
+    font-size: 12.5px;
+    line-height: 1.8;
+    color: #90a4ae;
+    margin-bottom: 16px;
+  }
+
+  .work-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .work-meta-item { font-size: 11px; color: #546e7a; }
+  .work-meta-item span { color: var(--px-white); }
+
+  .work-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .work-tag {
+    font-family: var(--font-pixel);
+    font-size: 6px;
+    padding: 3px 8px;
+    background: rgba(0,229,255,0.1);
+    border: 1px solid var(--px-cyan);
+    color: var(--px-cyan);
+  }
+
+  /* Appeal points */
+  .work-appeals {
+    margin-top: 14px;
+    border-top: 1px dashed rgba(0,229,255,0.2);
+    padding-top: 12px;
+  }
+  .work-appeals-title {
+    font-family: var(--font-pixel);
+    font-size: 7px;
+    color: var(--px-green);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+  .work-appeal-item {
+    font-size: 11.5px;
+    line-height: 1.7;
+    color: #78909c;
+    padding: 4px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .work-appeal-item::before {
+    content: '▶';
+    position: absolute; left: 0;
+    font-size: 7px;
+    color: var(--px-cyan);
+    top: 7px;
+  }
+
+  /* ===== CONTACT ===== */
+  #contact {
+    background: var(--px-black);
+    text-align: center;
+  }
+  .contact-box {
+    max-width: 600px;
+    margin: 0 auto;
+    background: var(--px-card);
+    border: 3px solid var(--px-cyan);
+    box-shadow: 8px 8px 0 var(--px-blue);
+    padding: 48px 40px;
+  }
+  .contact-box p {
+    font-size: 14px;
+    color: #90a4ae;
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+  .contact-links { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--px-navy);
+    border-top: 2px solid var(--px-blue);
+    text-align: center;
+    padding: 24px;
+    font-family: var(--font-pixel);
+    font-size: 7px;
+    color: var(--px-gray);
+    letter-spacing: 2px;
+  }
+
+  /* ===== PIXEL CORNERS ===== */
+  .px-corner {
+    position: relative;
+  }
+  .px-corner::before, .px-corner::after {
+    content: '';
+    position: absolute;
+    width: 12px; height: 12px;
+    border-color: var(--px-cyan);
+    border-style: solid;
+  }
+  .px-corner::before { top: -3px; left: -3px; border-width: 3px 0 0 3px; }
+  .px-corner::after  { top: -3px; right: -3px; border-width: 3px 3px 0 0; }
+
+  /* ===== SCROLL REVEAL ===== */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .5s, transform .5s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 700px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .btn-outline { margin-left: 0; margin-top: 12px; }
+    nav { padding: 12px 4vw; }
+    .nav-links { gap: 10px; }
+    .nav-links a { font-size: 6px; padding: 5px 7px; }
+    .contact-box { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">YOSHI.DEV</div>
+  <ul class="nav-links">
+    <li><a href="#about">ABOUT</a></li>
+    <li><a href="#skills">SKILLS</a></li>
+    <li><a href="#works">WORKS</a></li>
+    <li><a href="#contact">CONTACT</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-stars" id="stars"></div>
+
+  <p class="hero-tag">GAME PROGRAMMER</p>
+  <h1 class="hero-name">石川原 <span>吉美</span></h1>
+  <p class="hero-sub">ISHIKAWAHARA YOSHIMI</p>
+  <p class="hero-bio">
+    横浜デジタルアーツ専門学校 ゲーム科 3年。<br>
+    Unityを中心にゲームロジック設計・システム実装を得意とする<br>
+    ゲームプログラマー志望。
+  </p>
+  <div>
+    <a href="#works" class="btn-pixel">WORKS →</a>
+    <a href="#contact" class="btn-pixel btn-outline">CONTACT</a>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2 class="section-title">ABOUT ME</h2>
+  <div class="about-grid reveal">
+
+    <div class="player-card">
+      <div class="player-avatar">🎮</div>
+      <p class="player-name">YOSHIMI</p>
+      <p class="player-class">GAME PROGRAMMER</p>
+      <div class="stat-row"><span>生年月日</span><span class="stat-val">2005.09.30</span></div>
+      <div class="stat-row"><span>学校</span><span class="stat-val">YDA GAME Dept.</span></div>
+      <div class="stat-row"><span>学年</span><span class="stat-val">3年生</span></div>
+      <div class="stat-row"><span>得意分野</span><span class="stat-val">GAME LOGIC</span></div>
+    </div>
+
+    <div class="about-text">
+      <h3>// PROFILE</h3>
+      <p>
+        ゲームロジック設計とシステム実装を得意としています。Unityを使ったゲーム開発を中心に、
+        プレイヤー操作・入力管理・ゲーム進行管理など、ゲームの根幹となるシステムの設計・実装を
+        経験してきました。チーム開発でも責務分離やデバッグを意識した、保守しやすいコードを
+        書くことを心がけています。
+      </p>
+
+      <h3>// LIKES</h3>
+      <p>
+        趣味はゲーム・漫画・映画鑑賞・昼寝。好きなゲームは Marvel's Spider-Man、
+        ラチェット＆クランク、CrossFire、ストリートファイター6、スマブラ、OW2 など幅広く。
+      </p>
+
+      <h3>// LANG &amp; TOOLS</h3>
+      <div class="tag-cloud">
+        <span class="tag">C</span>
+        <span class="tag">C++</span>
+        <span class="tag">C#</span>
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">PHP</span>
+        <span class="tag">SQL</span>
+        <span class="tag green">Unity</span>
+        <span class="tag green">UE4</span>
+        <span class="tag green">Visual Studio</span>
+        <span class="tag green">VS Code</span>
+        <span class="tag green">GitHub</span>
+        <span class="tag yellow">CGクリエイター検定ベーシック</span>
+        <span class="tag yellow">情報処理活用能力検定3級</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <h2 class="section-title">SKILL STATS</h2>
+  <div class="skills-grid reveal">
+
+    <div class="skill-card">
+      <p class="skill-card-title">// LANGUAGE</p>
+      <div class="skill-item">
+        <span class="skill-item-name">C#</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">C / C++</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:65%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">HTML / CSS</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:60%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">PHP / SQL</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:45%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <p class="skill-card-title">// ENGINE / IDE</p>
+      <div class="skill-item">
+        <span class="skill-item-name">Unity</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">Visual Studio</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:80%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">Unreal Engine 4</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:40%"></div></div>
+      </div>
+      <div class="skill-item">
+        <span class="skill-item-name">GitHub</span>
+        <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-card">
+      <p class="skill-card-title">// CERTIFICATION</p>
+      <div class="skill-cert">CGクリエイター検定ベーシック</div>
+      <div class="skill-cert">情報処理活用能力検定 3級</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORKS -->
+<section id="works">
+  <h2 class="section-title">WORKS</h2>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">ALL</button>
+    <button class="filter-btn" data-filter="solo">SOLO</button>
+    <button class="filter-btn" data-filter="team">TEAM</button>
+    <button class="filter-btn" data-filter="2d">2D</button>
+    <button class="filter-btn" data-filter="3d">3D</button>
+    <button class="filter-btn" data-filter="wip">制作中</button>
+  </div>
+
+  <div class="works-grid reveal" id="works-grid">
+
+    <!-- 1. MACHINA PARTY -->
+    <div class="work-card" data-tags="3d team wip">
+      <span class="work-badge badge-wip">制作中</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#0d1b2a,#1b3a6b);">
+        🏎️
+        <span class="work-thumb-label">3D PARTY GAME</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">MACHINA PARTY</p>
+        <p class="work-desc">
+          戦車・車などの乗り物で遊ぶ3Dパーティーゲーム。最大4人マルチプレイ対応。
+          レース・バトルなど複数ゲームモードを収録予定。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Windows</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Engine: <span>Unity 6</span></div>
+          <div class="work-meta-item">Team: <span>Prog×2</span></div>
+        </div>
+        <div class="work-meta" style="grid-template-columns:1fr;">
+          <div class="work-meta-item">Period: <span>2026年4月〜（制作中）</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">3D</span>
+          <span class="work-tag">MULTI</span>
+          <span class="work-tag">PARTY</span>
+          <span class="work-tag">INPUT SYSTEM</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">InputReaderを独自実装し、KB・ゲームパッドの複数入力に対応</p>
+          <p class="work-appeal-item">TankManagerで最大4人のプレイヤー・CPU管理を一元化</p>
+          <p class="work-appeal-item">コンポーネント分離による再利用しやすいシステム設計</p>
+          <p class="work-appeal-item">カメラ基準移動とチャージショットシステムを実装</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. BOMBER ARENA -->
+    <div class="work-card" data-tags="2d solo">
+      <span class="work-badge badge-done">COMPLETE</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#1b2a0d,#2a4a10);">
+        💣
+        <span class="work-thumb-label">2D ACTION</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">BOMBER ARENA</p>
+        <p class="work-desc">
+          最大4人対戦のボンバーマン風2D見下ろし型アクションゲーム。
+          爆弾・アイテムシステムとラウンド制対戦を実装。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Win/Android</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Engine: <span>Unity 6</span></div>
+          <div class="work-meta-item">Period: <span>2025/12〜2026/2</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">2D</span>
+          <span class="work-tag">ACTION</span>
+          <span class="work-tag">MULTI</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">勝敗判定・ラウンド進行・生存管理を統合した対戦システム</p>
+          <p class="work-appeal-item">爆弾設置〜爆風展開〜障害物破壊まで一連のシステムを実装</p>
+          <p class="work-appeal-item">ラウンド終了後の完全ステージリセット機能を実装</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. FLYING BIRD -->
+    <div class="work-card" data-tags="2d solo">
+      <span class="work-badge badge-done">COMPLETE</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#0d1f2a,#0f3a5a);">
+        🐦
+        <span class="work-thumb-label">2D CASUAL</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">FLYING BIRD</p>
+        <p class="work-desc">
+          タップ/クリック操作で障害物を避けるFlappy Bird風2Dアクションゲーム。
+          操作感・テンポ・演出を重視して制作。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Win/Android</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Engine: <span>Unity</span></div>
+          <div class="work-meta-item">Period: <span>2025/8〜9</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">2D</span>
+          <span class="work-tag">CASUAL</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">Singleton GameManager/SoundManagerでゲーム状態と音を一元管理</p>
+          <p class="work-appeal-item">Kinematic Rigidbodyで物理演算に頼らない独自の重力・操作感を実現</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 避けるんデス -->
+    <div class="work-card" data-tags="2d team">
+      <span class="work-badge badge-team">TEAM</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#2a0d0d,#4a1010);">
+        🚀
+        <span class="work-thumb-label">2D SHOOTING</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">避けるんデス</p>
+        <p class="work-desc">
+          ウェーブ制で敵が出現する2D弾幕シューティングゲーム。
+          スピード変化アイテムや無敵・シールド・ボムを実装。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Windows</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Engine: <span>Unity</span></div>
+          <div class="work-meta-item">Team: <span>Prog×3</span></div>
+        </div>
+        <div class="work-meta" style="grid-template-columns:1fr;">
+          <div class="work-meta-item">Period: <span>2025/6〜8</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">2D</span>
+          <span class="work-tag">STG</span>
+          <span class="work-tag">TEAM×3</span>
+          <span class="work-tag">NEW INPUT</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">担当：プレイヤー制御・アイテムシステム・ゲーム進行管理・入力管理</p>
+          <p class="work-appeal-item">新InputSystemでコントローラー対応、デバイスに依存しない入力設計</p>
+          <p class="work-appeal-item">スピード変化を排他制御し、エフェクト不整合を防ぐ設計</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ケガレの館 -->
+    <div class="work-card" data-tags="2d team">
+      <span class="work-badge badge-team">TEAM</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#1a0a2e,#2d1654);">
+        👻
+        <span class="work-thumb-label">2D HORROR</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">ケガレの館</p>
+        <p class="work-desc">
+          1年時のゲームジャムで3日間で制作した2Dホラー脱出ゲーム。
+          敵から逃げながらアイテムを集めて制限時間内に脱出する。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Windows</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Period: <span>3日間（GJ）</span></div>
+          <div class="work-meta-item">Team: <span>Prog×4 Des×1</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">2D</span>
+          <span class="work-tag">HORROR</span>
+          <span class="work-tag">GAME JAM</span>
+          <span class="work-tag">TEAM×5</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">担当：プレイヤー操作・ダメージ処理・当たり判定</p>
+          <p class="work-appeal-item">ダメージ処理を共通化し、敵・トラップ追加に対応しやすい設計</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Xevious -->
+    <div class="work-card" data-tags="2d team">
+      <span class="work-badge badge-team">TEAM</span>
+      <div class="work-thumb" style="background:linear-gradient(135deg,#0a1a0a,#103010);">
+        🛸
+        <span class="work-thumb-label">2D SHOOTING</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">XEVIOUS</p>
+        <p class="work-desc">
+          1年次チーム制作。アーケード版Xeviousを題材に再現した2Dシューティングゲーム。
+          原作の操作感・攻撃システムを意識して実装。
+        </p>
+        <div class="work-meta">
+          <div class="work-meta-item">Platform: <span>Windows</span></div>
+          <div class="work-meta-item">Lang: <span>C#</span></div>
+          <div class="work-meta-item">Engine: <span>Unity</span></div>
+          <div class="work-meta-item">Team: <span>Prog×4</span></div>
+        </div>
+        <div class="work-meta" style="grid-template-columns:1fr;">
+          <div class="work-meta-item">Period: <span>2024/10〜2025/2</span></div>
+        </div>
+        <div class="work-tags">
+          <span class="work-tag">2D</span>
+          <span class="work-tag">STG</span>
+          <span class="work-tag">TEAM×4</span>
+          <span class="work-tag">RETRO</span>
+        </div>
+        <div class="work-appeals">
+          <p class="work-appeals-title">// APPEAL POINTS</p>
+          <p class="work-appeal-item">担当：自機システム全般（移動・弾・残機・当たり判定・リスポーン・マップスクロール）</p>
+          <p class="work-appeal-item">ザッパー・ブラスター2弾種＋照準表示・クールタイム・エフェクトを実装</p>
+          <p class="work-appeal-item">Inspectorから各パラメータを調整可能な拡張性の高い設計</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="section-title">CONTACT</h2>
+  <div class="contact-box px-corner reveal">
+    <p>
+      ゲームプログラマーとして就職活動中です。<br>
+      作品についてのご質問・採用に関するお問い合わせなど、<br>
+      お気軽にご連絡ください。
+    </p>
+    <div class="contact-links">
+      <a href="mailto:your@email.com" class="btn-pixel">✉ MAIL</a>
+      <a href="https://github.com/" target="_blank" class="btn-pixel btn-outline">⌥ GITHUB</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2026 ISHIKAWAHARA YOSHIMI — GAME PROGRAMMER PORTFOLIO
+</footer>
+
+<script>
+  // Stars
+  const starContainer = document.getElementById('stars');
+  for (let i = 0; i < 60; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left: ${Math.random()*100}%;
+      top: ${Math.random()*100}%;
+      animation-delay: ${Math.random()*3}s;
+      animation-duration: ${1.5+Math.random()*2}s;
+      width: ${Math.random()>0.7?6:4}px;
+      height: ${Math.random()>0.7?6:4}px;
+    `;
+    starContainer.appendChild(s);
+  }
+
+  // Filter
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const workCards  = document.querySelectorAll('.work-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      workCards.forEach(card => {
+        const tags = card.dataset.tags.split(' ');
+        card.classList.toggle('hidden', f !== 'all' && !tags.includes(f));
+      });
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => io.observe(r));
+</script>
+</body>
+</html>
