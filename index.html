@@ -340,11 +340,34 @@
       お気軽にご連絡ください。
     </p>
     <div class="contact-links">
-      <a href="mailto:jojoishi21@gmail.com" class="btn-pixel">📧 MAIL</a>
+      <button class="btn-pixel" onclick="openMailForm()">📧 MAIL</button>
       <a href="https://github.com/Yoshinko45" target="_blank" class="btn-pixel btn-outline">🔗 GITHUB</a>
     </div>
   </div>
 </section>
+
+<!-- メールフォーム用モーダル -->
+<div id="mail-modal-overlay">
+  <div id="mail-modal-box">
+    <button id="mail-modal-close" onclick="closeMailModal()">✕ CLOSE</button>
+    <h3>お問い合わせ</h3>
+    <form id="mail-form" action="https://formspree.io/f/your-form-id" method="POST">
+      <label>
+        お名前
+        <input type="text" name="name" required>
+      </label>
+      <label>
+        メールアドレス
+        <input type="email" name="email" required>
+      </label>
+      <label>
+        メッセージ
+        <textarea name="message" rows="5" required></textarea>
+      </label>
+      <button type="submit" class="btn-pixel">送信</button>
+    </form>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -433,12 +456,39 @@
     });
   });
 
+   // メールフォームモーダル
+  const mailOverlay = document.getElementById('mail-modal-overlay');
+  const mailForm = document.getElementById('mail-form');
+
+  function openMailForm() {
+    mailOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMailModal() {
+    mailOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // フォーム送信後の処理（任意）
+  mailForm.addEventListener('submit', (e) => {
+    // 送信後にモーダルを閉じる
+    setTimeout(() => {
+      closeMailModal();
+      alert('お問い合わせありがとうございます。ご連絡をお待ちください。');
+    }, 500);
+  });
+
   // オーバーレイ背景クリックで閉じる
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) closeModal();
   });
 
   function closeModal() {
+    // モーダルを閉じる前に動画を停止
+    const thumbWrap = document.getElementById('modal-thumb-wrap');
+    thumbWrap.innerHTML = ''; // iframe を削除
+
     overlay.classList.remove('open');
     document.body.style.overflow = '';
   }

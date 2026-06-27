@@ -1294,6 +1294,65 @@ body.loading{
   cursor: pointer;
 }
 
+/* メールフォームモーダル */
+#mail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+#mail-modal-overlay.open {
+  display: flex;
+}
+#mail-modal-box {
+  background: var(--px-card);
+  border: 2px solid var(--px-cyan);
+  padding: 24px;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  color: var(--px-white);
+  font-family: var(--font-normal);
+}
+#mail-modal-box h3 {
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: var(--px-cyan);
+}
+#mail-modal-close {
+  float: right;
+  background: none;
+  border: none;
+  color: var(--px-white);
+  font-size: 18px;
+  cursor: pointer;
+}
+#mail-form label {
+  display: block;
+  margin-bottom: 16px;
+}
+#mail-form input,
+#mail-form textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid var(--px-gray);
+  color: var(--px-white);
+  font-family: var(--font-normal);
+  border-radius: 4px;
+}
+#mail-form button[type="submit"] {
+  width: 100%;
+}
+
 /* ==========================================
    レスポンシブ（スマホ・タブレット）
    ========================================== */
