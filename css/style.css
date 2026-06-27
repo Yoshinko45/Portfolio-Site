@@ -121,14 +121,14 @@ nav {
    ヒーローセクション（トップ）
    ========================================== */
 #hero {
-  min-height: 100vh; /* 画面高さいっぱい */
+  min-height: 50vh; /* 画面高さいっぱい */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center; /* 中央揃え */
   text-align: center;
   position: relative;     /* 背景要素の基準 */
-  padding: 100px 5vw 60px; /* 上100px、左右5vw、下60px */
+  padding: 80px 5vw 40px; /* 上100px、左右5vw、下60px */
   overflow: hidden;       /* 背景アニメーションのはみ出しを隠す */
 }
 
@@ -324,8 +324,8 @@ section {
 }
 
 .player-avatar {
-  width: 120px;
-  height: 120px;
+  width: 300px;
+  height: 300px;
   margin: 0 auto 20px;
   background: var(--px-blue);
   border: 3px solid var(--px-cyan);
@@ -570,11 +570,14 @@ section {
 /* 作品のバッジ（WIP / COMPLETE / TEAM） */
 .work-badge {
   position: absolute;
-  top: 12px; right: 12px;
+  top: 0;
+  right: 0;
   font-family: var(--font-pixel);
   font-size: 6px;
   padding: 4px 8px;
-  z-index: 2; /* サムネイルより前面に */
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6);  /* ← 半透明の黒背景 */
+  color: var(--px-white);           /* ← 文字は白に統一 */
 }
 
 .badge-wip {
@@ -595,25 +598,40 @@ section {
 /* サムネイル部分 */
 .work-thumb {
   width: 100%;
-  height: 140px;
+  height: 200px;
   background: var(--px-blue);
+  position: relative;
+  overflow: hidden;
+  display: block; /* flexをやめてblockに */
+}
+
+.work-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 絵文字サムネのフォールバック用 */
+.work-thumb-emoji {
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-pixel);
-  font-size: 28px;
-  color: var(--px-cyan);
-  border-bottom: 2px solid var(--px-blue);
-  position: relative;
-  overflow: hidden;
+  font-size: 48px;
 }
 
 .work-thumb-label {
   position: absolute;
-  bottom: 8px; left: 12px;
+  bottom: 0;
+  left: 0;
+  right: 0;
   font-family: var(--font-pixel);
   font-size: 6px;
-  color: rgba(0,229,255,0.6);
+  color: var(--px-white);
+  background: rgba(0,0,0,0.6);
+  padding: 6px 12px;
 }
 
 /* 作品の本文（タイトル・説明・メタ情報） */
@@ -762,19 +780,23 @@ footer {
 }
 
 .table-cell {
-  font-family: var(--font-pixel);
-  font-size: 9px;
-  padding: 6px 10px;
+  font-family: var(--font-body);  /* ← ピクセルフォントをやめて普通のフォントに */
+  font-size: 13px;                /* ← 文字を大きく */
+  padding: 8px 12px;
   border: 2px solid rgba(0,229,255,0.3);
   background: rgba(0,229,255,0.05);
   color: #b0bec5;
+  line-height: 1.7;               /* ← 行間を広めに */
 }
 
 .table-row .table-cell:first-child {
+  font-family: var(--font-pixel); /* ← ラベル列だけピクセルフォントをキープ */
+  font-size: 8px;
   color: var(--px-yellow);
   background: rgba(255,225,53,0.08);
   border-color: rgba(255,225,53,0.4);
   text-align: center;
+  white-space: nowrap;            /* ← ラベルが折り返さないように */
 }
 
 .table-row .table-cell:last-child {
@@ -834,37 +856,6 @@ footer {
 .reveal.visible {
   opacity: 1;
   transform: none; /* 元の位置に戻す */
-}
-
-/* ==========================================
-   レスポンシブ（スマホ・タブレット）
-   ========================================== */
-@media (max-width: 700px) {
-  .about-grid {
-    grid-template-columns: 1fr; /* 1列レイアウトに変更 */
-  }
-
-  .btn-outline {
-    margin-left: 0;
-    margin-top: 12px; /* 縦並びにして上マージンを追加 */
-  }
-
-  nav {
-    padding: 12px 4vw; /* 左右の余白を少し減らす */
-  }
-
-  .nav-links {
-    gap: 10px; /* リンク間隔を狭める */
-  }
-
-  .nav-links a {
-    font-size: 6px;
-    padding: 5px 7px;
-  }
-
-  .contact-box {
-    padding: 32px 20px; /* 内側の余白を減らす */
-  }
 }
 
 /* ==========================================
@@ -1119,31 +1110,233 @@ body.loading{
 
 }
 
-/* スマホ */
-@media(max-width:700px){
+/* ==========================================
+   モーダル関連スタイル（HTML内の <style> を統合）
+   ========================================== */
 
-    .loading-title{
+/* モーダルオーバーレイ */
+#modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 
-        font-size:20px;
+#modal-overlay.open {
+  display: flex;
+}
 
-    }
+/* モーダル本体 */
+#modal-box {
+  background: var(--px-navy);
+  border: 3px solid var(--px-cyan);
+  box-shadow: 8px 8px 0 var(--px-blue);
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+}
 
-    .loading-sub{
+/* モーダル内サムネイル */
+#modal-thumb {
+  width: 100%;
+  height: auto;        /* 固定heightをやめる */
+  max-height: 300px;
+  object-fit: contain; /* coverからcontainに変更 */
+  display: block;
+  background: var(--px-blue);
+}
 
-        font-size:8px;
+#modal-thumb-emoji {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  background: var(--px-blue);
+}
 
-    }
+/* モーダルコンテンツ */
+#modal-content {
+  padding: 28px 32px;
+}
 
-    .loading-status{
+/* モーダル閉じるボタン */
+#modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  color: var(--px-white);
+  background: rgba(0,0,0,0.7);
+  border: 2px solid var(--px-cyan);
+  padding: 6px 12px;
+  cursor: pointer;
+  z-index: 2;
+}
 
-        font-size:8px;
+#modal-close:hover {
+  background: var(--px-cyan);
+  color: var(--px-black);
+}
 
-    }
+/* モーダルタイトル */
+#modal-title {
+  font-family: var(--font-pixel);
+  font-size: 14px;
+  color: var(--px-yellow);
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
 
-    .loading-percent{
+/* モーダルバッジ */
+#modal-badge {
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  padding: 4px 10px;
+  margin-bottom: 16px;
+  display: inline-block;
+}
 
-        font-size:10px;
+/* モーダル説明文 */
+#modal-desc {
+  font-size: 14px;
+  line-height: 1.9;
+  color: #b0bec5;
+  margin-bottom: 20px;
+}
 
-    }
+/* モーダルメタ情報（Platform / Lang / Engine / Team / Period） */
+#modal-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: rgba(0,229,255,0.05);
+  border: 1px solid rgba(0,229,255,0.2);
+}
 
+.modal-meta-item {
+  font-size: 12px;
+  color: #546e7a;
+}
+
+.modal-meta-item span {
+  color: var(--px-white);
+}
+
+/* モーダルタグ */
+#modal-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.modal-tag {
+  font-family: var(--font-pixel);
+  font-size: 6px;
+  padding: 4px 10px;
+  background: rgba(0,229,255,0.1);
+  border: 1px solid var(--px-cyan);
+  color: var(--px-cyan);
+}
+
+/* モーダルアピールポイント */
+#modal-appeals {
+  border-top: 1px dashed rgba(0,229,255,0.2);
+  padding-top: 16px;
+}
+
+#modal-appeals-title {
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--px-green);
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.modal-appeal-item {
+  font-size: 13px;
+  line-height: 1.8;
+  color: #90a4ae;
+  padding: 5px 0 5px 18px;
+  position: relative;
+}
+
+.modal-appeal-item::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  font-size: 8px;
+  color: var(--px-cyan);
+  top: 8px;
+}
+
+/* モーダルPDFボタン */
+#modal-pdf-btn {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  font-size: 8px;
+}
+
+/* 作品カードのクリック感 */
+.work-card {
+  cursor: pointer;
+}
+
+/* ==========================================
+   レスポンシブ（スマホ・タブレット）
+   ========================================== */
+@media (max-width: 700px) {
+  .about-grid {
+    grid-template-columns: 1fr; /* 1列レイアウトに変更 */
+  }
+
+  .btn-outline {
+    margin-left: 0;
+    margin-top: 12px; /* 縦並びにして上マージンを追加 */
+  }
+
+  nav {
+    padding: 12px 4vw; /* 左右の余白を少し減らす */
+  }
+
+  .nav-links {
+    gap: 10px; /* リンク間隔を狭める */
+  }
+
+  .nav-links a {
+    font-size: 6px;
+    padding: 5px 7px;
+  }
+
+  .contact-box {
+    padding: 32px 20px; /* 内側の余白を減らす */
+  }
+
+  .loading-title{
+    font-size:20px;
+  }
+
+  .loading-sub{
+    font-size:8px;
+  }
+
+  .loading-status{
+    font-size:8px;
+  }
+
+  .loading-percent{
+    font-size:10px;
+  }
 }
