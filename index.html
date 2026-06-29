@@ -7,6 +7,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
+  <style>
+    /* ボタンサイズ・文字統一 */
+    .btn-pixel {
+      font-size: 11px;
+      border: 3px solid var(--px-cyan);
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
 
@@ -36,7 +44,10 @@
         <p id="modal-appeals-title">// APPEAL POINTS</p>
         <div id="modal-appeals-list"></div>
       </div>
-      <a id="modal-pdf-btn" class="btn-pixel" target="_blank">📄 作品詳細を見る（PDF）</a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+        <a id="modal-pdf-btn" class="btn-pixel" style="flex:1;" target="_blank">📄 作品詳細を見る（PDF）</a>
+        <a id="modal-source-btn" class="btn-pixel" style="flex:1;" target="_blank">💻 ソースコードの詳細はこちら</a>
+      </div>
     </div>
   </div>
 </div>
@@ -207,7 +218,8 @@
       data-platform="Win/Android" data-lang="C#" data-engine="Unity 6" data-period="2025/12〜2026/2"
       data-tags-display="2D,ACTION,MULTI"
       data-appeals="勝敗判定・ラウンド進行・生存管理を統合した対戦システム|爆弾設置〜爆風展開〜障害物破壊まで一連のシステムを実装|ラウンド終了後の完全ステージリセット機能を実装"
-      data-pdf="pdf/BomberArena.pdf"
+      data-pdf="pdf/BomberArena_Program.pdf"
+      data-github="https://github.com/Yoshinko45/Bomber-Arena/tree/main/Assets/Scripts"
       data-youtube="KcYYJUvRcik">
       <span class="work-badge badge-done">COMPLETE</span>
       <div class="work-thumb">
@@ -233,7 +245,8 @@
       data-platform="Win/Android" data-lang="C#" data-engine="Unity" data-period="2025/8〜9"
       data-tags-display="2D,CASUAL"
       data-appeals="Singleton GameManager/SoundManagerでゲーム状態と音を一元管理|Kinematic Rigidbodyで物理演算に頼らない独自の重力・操作感を実現"
-      data-pdf="pdf/FlyingBird.pdf"
+      data-pdf="pdf/FlyingBird_Program.pdf"
+      data-github="https://github.com/Yoshinko45/Flying-Bird/tree/main/Assets/Scripts"
       data-youtube="XVvTXHVSffM"> <!-- ここを更新 -->
       <span class="work-badge badge-done">COMPLETE</span>
       <div class="work-thumb">
@@ -449,6 +462,16 @@
         pdfBtn.style.display = 'block';
       } else {
         pdfBtn.style.display = 'none';
+      }
+
+      // ソースコードボタン（GitHub）
+      const github = card.dataset.github || '';
+      const sourceBtn = document.getElementById('modal-source-btn');
+      if (github) {
+        sourceBtn.href = github;
+        sourceBtn.style.display = 'block';
+      } else {
+        sourceBtn.style.display = 'none';
       }
 
       overlay.classList.add('open');
