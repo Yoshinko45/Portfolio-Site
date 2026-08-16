@@ -44,6 +44,10 @@
         <p id="modal-appeals-title">// APPEAL POINTS</p>
         <div id="modal-appeals-list"></div>
       </div>
+      <div id="modal-code">
+        <p id="modal-code-title">// CODE SNIPPET</p>
+        <div id="modal-code-block"><pre id="modal-code-pre"></pre></div>
+      </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
         <a id="modal-pdf-btn" class="btn-pixel" style="flex:1;" target="_blank">📄 作品詳細を見る（PDF）</a>
         <a id="modal-source-btn" class="btn-pixel" style="flex:1;" target="_blank">💻 ソースコードの詳細はこちら</a>
@@ -144,6 +148,7 @@
 <!-- SKILLS -->
 <section id="skills">
   <h2 class="section-title">SKILL STATS</h2>
+  <p class="skills-subtitle">※各バーは「自己評価による習熟度」の目安です（テストスコア等の客観指標ではありません）</p>
   <div class="skills-grid reveal">
     <div class="skill-card">
       <p class="skill-card-title">// LANGUAGE</p>
@@ -182,19 +187,20 @@
 
   <div class="works-grid reveal" id="works-grid">
 
-    <!-- 1. MACHINA PARTY -->
-    <div class="work-card" data-tags="3d team wip"
+    <!-- 1. MACHINA PARTY（★目玉作品） -->
+    <div class="work-card work-card-featured" data-tags="3d team wip"
       data-title="MACHINA PARTY"
       data-badge="制作中" data-badge-class="badge-wip"
       data-img="image/MachinaParty_サムネ.png"
       data-label="3D PARTY GAME"
       data-desc="戦車・車などの乗り物で遊ぶ3Dパーティーゲーム。最大4人マルチプレイ対応。レース・バトルなど複数ゲームモードを収録予定。"
       data-platform="Windows" data-lang="C#" data-engine="Unity 6" data-team="Prog×2" data-period="2026年4月〜（制作中）"
-      data-tags-display="3D,MULTI,PARTY,INPUT SYSTEM"
+      data-tags-display="UNITY 6,3D,MULTI,PARTY,INPUT SYSTEM"
       data-appeals="InputReaderを独自実装し、KB・ゲームパッドの複数入力に対応|TankManagerで最大4人のプレイヤー・CPU管理を一元化|コンポーネント分離による再利用しやすいシステム設計|カメラ基準移動とチャージショットシステムを実装"
       data-pdf="pdf/MachinaParty_Program.pdf"
       data-github="https://github.com/Yoshinko45/MACHINA_PARTY/tree/main/Assets/Scripts/Yoshimi"
       data-youtube="kyzpTByk9C8"> <!-- ★ここにYouTube動画IDを反映 -->
+      <span class="featured-ribbon">★ PICK UP</span>
       <span class="work-badge badge-wip">制作中</span>
       <div class="work-thumb">
         <img src="image/MachinaParty_サムネ.png" alt="MACHINA PARTY">
@@ -204,9 +210,48 @@
         <p class="work-title">MACHINA PARTY</p>
         <p class="work-desc">戦車・車などの乗り物で遊ぶ3Dパーティーゲーム。最大4人マルチプレイ対応。</p>
         <div class="work-tags">
-          <span class="work-tag">3D</span><span class="work-tag">MULTI</span><span class="work-tag">PARTY</span><span class="work-tag">INPUT SYSTEM</span>
+          <span class="work-tag work-tag-engine">UNITY 6</span><span class="work-tag">3D</span><span class="work-tag">MULTI</span><span class="work-tag">PARTY</span><span class="work-tag">INPUT SYSTEM</span>
         </div>
       </div>
+      <!-- ▼自信のあるコードスニペット（モーダルに表示されます） -->
+      <!-- ▼▼ここはサンプルです。実際にあなたが書いたコードに差し替えてください▼▼ -->
+      <script type="text/plain" class="work-code-source">// ※これはサンプルコードです。実際に書いたコードに差し替えてください
+// InputReader.cs（抜粋）─ 複数入力デバイスとチャージショットの管理
+
+public class InputReader : MonoBehaviour
+{
+    [SerializeField] private int playerIndex;
+    [SerializeField] private float chargeMaxTime = 1.5f;
+
+    private float chargeTimer;
+    private bool isCharging;
+
+    // プレイヤーIndexに応じてキーボード/ゲームパッドを切り替え
+    public Vector2 GetMoveInput()
+    {
+        return playerIndex == 0
+            ? new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"))
+            : new Vector2(
+                Input.GetAxis($"P{playerIndex}_Horizontal"),
+                Input.GetAxis($"P{playerIndex}_Vertical"));
+    }
+
+    // ボタン長押しでチャージ、離すと発射力(0〜1)を返す
+    public void UpdateCharge(bool isFireHeld, System.Action<float> onRelease)
+    {
+        if (isFireHeld)
+        {
+            isCharging = true;
+            chargeTimer = Mathf.Min(chargeTimer + Time.deltaTime, chargeMaxTime);
+        }
+        else if (isCharging)
+        {
+            isCharging = false;
+            onRelease?.Invoke(chargeTimer / chargeMaxTime);
+            chargeTimer = 0f;
+        }
+    }
+}</script>
     </div>
 
     <!-- 2. BOMBER ARENA -->
@@ -217,7 +262,7 @@
       data-label="2D ACTION"
       data-desc="最大4人対戦のボンバーマン風2D見下ろし型アクションゲーム。爆弾・アイテムシステムとラウンド制対戦を実装。"
       data-platform="Win/Android" data-lang="C#" data-engine="Unity 6" data-period="2025/12〜2026/2"
-      data-tags-display="2D,ACTION,MULTI"
+      data-tags-display="UNITY 6,2D,ACTION,MULTI"
       data-appeals="勝敗判定・ラウンド進行・生存管理を統合した対戦システム|爆弾設置〜爆風展開〜障害物破壊まで一連のシステムを実装|ラウンド終了後の完全ステージリセット機能を実装"
       data-pdf="pdf/BomberArena_Program.pdf"
       data-github="https://github.com/Yoshinko45/Bomber-Arena/tree/main/Scripts"
@@ -231,7 +276,7 @@
         <p class="work-title">BOMBER ARENA</p>
         <p class="work-desc">最大4人対戦のボンバーマン風2D見下ろし型アクションゲーム。爆弾・アイテムシステムとラウンド制対戦を実装。</p>
         <div class="work-tags">
-          <span class="work-tag">2D</span><span class="work-tag">ACTION</span><span class="work-tag">MULTI</span>
+          <span class="work-tag work-tag-engine">UNITY 6</span><span class="work-tag">2D</span><span class="work-tag">ACTION</span><span class="work-tag">MULTI</span>
         </div>
       </div>
     </div>
@@ -244,7 +289,7 @@
       data-label="2D CASUAL"
       data-desc="タップ/クリック操作で障害物を避けるFlappy Bird風2Dアクションゲーム。操作感・テンポ・演出を重視して制作。"
       data-platform="Win/Android" data-lang="C#" data-engine="Unity" data-period="2025/8〜9"
-      data-tags-display="2D,CASUAL"
+      data-tags-display="UNITY,2D,CASUAL"
       data-appeals="Singleton GameManager/SoundManagerでゲーム状態と音を一元管理|Kinematic Rigidbodyで物理演算に頼らない独自の重力・操作感を実現"
       data-pdf="pdf/FlyingBird_Program.pdf"
       data-github="https://github.com/Yoshinko45/Flying-Bird/tree/main/Scripts"
@@ -258,7 +303,7 @@
         <p class="work-title">FLYING BIRD</p>
         <p class="work-desc">タップ/クリック操作で障害物を避けるFlappy Bird風2Dアクションゲーム。</p>
         <div class="work-tags">
-          <span class="work-tag">2D</span><span class="work-tag">CASUAL</span>
+          <span class="work-tag work-tag-engine">UNITY</span><span class="work-tag">2D</span><span class="work-tag">CASUAL</span>
         </div>
       </div>
     </div>
@@ -271,7 +316,7 @@
       data-label="2D SHOOTING"
       data-desc="ウェーブ制で敵が出現する2D弾幕シューティングゲーム。スピード変化アイテムや無敵・シールド・ボムを実装。"
       data-platform="Windows" data-lang="C#" data-engine="Unity" data-team="Prog×3" data-period="2025/6〜8"
-      data-tags-display="2D,STG,TEAM×3,NEW INPUT"
+      data-tags-display="UNITY,2D,STG,TEAM×3,NEW INPUT"
       data-appeals="担当：プレイヤー制御・アイテムシステム・ゲーム進行管理・入力管理|新InputSystemでコントローラー対応、デバイスに依存しない入力設計|スピード変化を排他制御し、エフェクト不整合を防ぐ設計"
       data-pdf="pdf/避けるんデス.pdf"
       data-youtube="JkZ57Oymk2E"> <!-- ここを更新 -->
@@ -284,7 +329,7 @@
         <p class="work-title">避けるんデス</p>
         <p class="work-desc">ウェーブ制で敵が出現する2D弾幕シューティングゲーム。</p>
         <div class="work-tags">
-          <span class="work-tag">2D</span><span class="work-tag">STG</span><span class="work-tag">TEAM×3</span><span class="work-tag">NEW INPUT</span>
+          <span class="work-tag work-tag-engine">UNITY</span><span class="work-tag">2D</span><span class="work-tag">STG</span><span class="work-tag">TEAM×3</span><span class="work-tag">NEW INPUT</span>
         </div>
       </div>
     </div>
@@ -296,8 +341,8 @@
       data-img="image/ケガレの館_サムネ.png"
       data-label="2D HORROR"
       data-desc="1年時のゲームジャムで3日間で制作した2Dホラー脱出ゲーム。敵から逃げながらアイテムを集めて制限時間内に脱出する。"
-      data-platform="Windows" data-lang="C#" data-team="Prog×4 Des×1" data-period="3日間（GJ）"
-      data-tags-display="2D,HORROR,GAME JAM,TEAM×5"
+      data-platform="Windows" data-lang="C#" data-engine="Unity" data-team="Prog×4 Des×1" data-period="3日間（GJ）"
+      data-tags-display="UNITY,2D,HORROR,GAME JAM,TEAM×5"
       data-appeals="担当：プレイヤー操作・ダメージ処理・当たり判定|ダメージ処理を共通化し、敵・トラップ追加に対応しやすい設計"
       data-pdf="pdf/ケガレの館.pdf"
       data-youtube="juEmJqHvT40"> <!-- ここを更新 -->
@@ -310,7 +355,7 @@
         <p class="work-title">ケガレの館</p>
         <p class="work-desc">1年時のゲームジャムで3日間で制作した2Dホラー脱出ゲーム。</p>
         <div class="work-tags">
-          <span class="work-tag">2D</span><span class="work-tag">HORROR</span><span class="work-tag">GAME JAM</span><span class="work-tag">TEAM×5</span>
+          <span class="work-tag work-tag-engine">UNITY</span><span class="work-tag">2D</span><span class="work-tag">HORROR</span><span class="work-tag">GAME JAM</span><span class="work-tag">TEAM×5</span>
         </div>
       </div>
     </div>
@@ -323,7 +368,7 @@
       data-label="2D SHOOTING"
       data-desc="1年次チーム制作。アーケード版Xeviousを題材に再現した2Dシューティングゲーム。原作の操作感・攻撃システムを意識して実装。"
       data-platform="Windows" data-lang="C#" data-engine="Unity" data-team="Prog×4" data-period="2024/10〜2025/2"
-      data-tags-display="2D,STG,TEAM×4,RETRO"
+      data-tags-display="UNITY,2D,STG,TEAM×4,RETRO"
       data-appeals="担当：自機システム全般（移動・弾・残機・当たり判定・リスポーン・マップスクロール）|ザッパー・ブラスター2弾種＋照準表示・クールタイム・エフェクトを実装|Inspectorから各パラメータを調整可能な拡張性の高い設計"
       data-pdf="pdf/Xevious.pdf"
        data-youtube="k2gGOhJBSg4"> <!-- ここを更新 -->
@@ -336,7 +381,7 @@
         <p class="work-title">XEVIOUS</p>
         <p class="work-desc">アーケード版Xeviousを題材に再現した2Dシューティングゲーム。</p>
         <div class="work-tags">
-          <span class="work-tag">2D</span><span class="work-tag">STG</span><span class="work-tag">TEAM×4</span><span class="work-tag">RETRO</span>
+          <span class="work-tag work-tag-engine">UNITY</span><span class="work-tag">2D</span><span class="work-tag">STG</span><span class="work-tag">TEAM×4</span><span class="work-tag">RETRO</span>
         </div>
       </div>
     </div>
@@ -387,7 +432,7 @@
 <footer>
   &copy; 2026 ISHIKAWAHARA YOSHIMI — GAME PROGRAMMER PORTFOLIO<br><br>
   <span style="color: var(--px-cyan); font-size: 10px; display: inline-block;">
-    最終更新日：2026.06.27<br>
+    最終更新日：2026.08.17<br>
     随時更新中！
   </span>
 </footer>
@@ -455,6 +500,17 @@
       // アピールポイント
       document.getElementById('modal-appeals-list').innerHTML =
         appeals.split('|').map(a => `<p class="modal-appeal-item">${a.trim()}</p>`).join('');
+
+      // コードスニペット（.work-code-source があるカードだけ表示）
+      const codeEl = card.querySelector('.work-code-source');
+      const codeSection = document.getElementById('modal-code');
+      const codePre = document.getElementById('modal-code-pre');
+      if (codeEl && codeEl.textContent.trim()) {
+        codePre.textContent = codeEl.textContent.trim();
+        codeSection.style.display = 'block';
+      } else {
+        codeSection.style.display = 'none';
+      }
 
       // PDFボタン
       const pdfBtn = document.getElementById('modal-pdf-btn');
