@@ -7,6 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/works-extra.css">
   <style>
     /* ボタンサイズ・文字統一 */
     .btn-pixel {
@@ -34,12 +35,31 @@
   <div id="modal-box">
     <button id="modal-close" onclick="closeModal()">✕ CLOSE</button>
     <div id="modal-thumb-wrap"></div>
+    <div id="modal-gallery"></div>
     <div id="modal-content">
       <span id="modal-badge"></span>
       <p id="modal-title"></p>
       <p id="modal-desc"></p>
       <div id="modal-meta"></div>
       <div id="modal-tags"></div>
+      <!-- ルーム状態遷移図（data-flow があるカードだけ js/works-extra.js が表示する） -->
+      <div id="modal-flow">
+        <p id="modal-flow-title">// ROOM STATE FLOW</p>
+        <div class="flow-row">
+          <div class="flow-node flow-n1"><span class="flow-code">waiting</span><span class="flow-jp">待機中</span></div>
+          <div class="flow-arrow"><span>ホストが<br>開始</span><i></i></div>
+          <div class="flow-node flow-n2"><span class="flow-code">in_progress</span><span class="flow-jp">出題中</span></div>
+          <div class="flow-arrow"><span>全員回答<br>or 時間切れ</span><i></i></div>
+          <div class="flow-node flow-n3"><span class="flow-code">result</span><span class="flow-jp">結果発表中</span></div>
+          <div class="flow-arrow"><span>最後の問題<br>（5秒後）</span><i></i></div>
+          <div class="flow-node flow-n4"><span class="flow-code">finished</span><span class="flow-jp">終了</span></div>
+        </div>
+        <div class="flow-loop">
+          <div class="flow-loop-line"></div>
+          <p class="flow-loop-label">次の問題がある場合は5秒後に自動で出題中へ</p>
+        </div>
+        <p class="flow-note">ホスト・参加者とも数秒おきにルームの状態を取得（ポーリング）して画面を切り替えます。状態の遷移はサーバー側が判定し、ホストのボタン操作は「今すぐ進めたいとき」のショートカットです。</p>
+      </div>
       <div id="modal-appeals">
         <p id="modal-appeals-title">// APPEAL POINTS</p>
         <div id="modal-appeals-list"></div>
@@ -182,6 +202,7 @@
     <button class="filter-btn" data-filter="team">TEAM</button>
     <button class="filter-btn" data-filter="2d">2D</button>
     <button class="filter-btn" data-filter="3d">3D</button>
+    <button class="filter-btn" data-filter="web">WEB</button>
     <button class="filter-btn" data-filter="wip">制作中</button>
   </div>
 
@@ -255,7 +276,69 @@ private void Move()
 }</script>
     </div>
 
-    <!-- 2. BOMBER ARENA -->
+    <!-- 2. QUIZROOM（Webアプリ・個人制作） -->
+    <div class="work-card" data-tags="web solo"
+      data-title="QUIZROOM"
+      data-badge="COMPLETE" data-badge-class="badge-done"
+      data-img="image/QuizRoom_サムネ.png"
+      data-label="WEB QUIZ GAME"
+      data-desc="ルームコードひとつで集まって遊べるクイズ大会Webアプリ。ホストの進行に合わせて参加者の画面が切り替わり、回答の速さがスコアに反映される。授業課題として、設計→開発→テストの全工程を一人で担当。"
+      data-platform="Web" data-lang="PHP / SQL" data-engine="Laravel 12" data-period="2026年（授業課題）"
+      data-tags-display="LARAVEL 12,PHP,MARIADB,WEB,MULTI,OPENTDB API"
+      data-appeals="企画〜設計〜実装〜テスト〜ドキュメント整備まで一人で担当（設計書8種／単体テスト29件＋結合テスト7件）|WebSocketを使わず、数秒おきのポーリングとroomsのstatus管理だけでホスト・参加者の画面を同期|全員回答・時間切れ・結果発表5秒後を条件に、ホスト操作なしで進む自動進行ロジックを実装|正誤＋回答速度でスコアを算出し、問題ごとの暫定順位・最終ランキングを表示|OpenTDB APIで問題を取得し、無料翻訳API（MyMemory）で日本語化して保存。タイムアウト時は2回まで自動で再試行|過去ルームの回答まで数えて即「全員回答」と誤判定する不具合を、原因を切り分けて解消"
+      data-gallery="image/QuizRoom_01_quizlist.png|image/QuizRoom_02_room.png|image/QuizRoom_03_waiting.png|image/QuizRoom_04_sync.png|image/QuizRoom_05_result.png|image/QuizRoom_06_final.png"
+      data-gallery-captions="HOST｜マイクイズ一覧。自作クイズとOpenTDB取得クイズを管理し、ここからルームを作成|HOST｜ルーム作成・待機。発行したルームコードを共有すると、入室した参加者が一覧に自動で反映される|PLAYER｜待機画面。ニックネームとルームコードだけで入室（アカウント不要）。自分の名前はハイライト表示|HOST × PLAYER｜出題中。タイマー付きで両方の画面が同時に進行（左：ホスト／右：参加者）|PLAYER｜結果画面。正誤・獲得スコア（回答速度込み）・暫定ランキングを表示|HOST × PLAYER｜最終結果。ホストは全員のランキング、参加者は自分の順位とスコアを表示"
+      data-flow="room-status"
+      data-pdf="pdf/QuizRoom.pdf">
+      <span class="work-badge badge-done">COMPLETE</span>
+      <div class="work-thumb">
+        <img src="image/QuizRoom_サムネ.png" alt="QUIZROOM">
+        <span class="work-thumb-label">WEB QUIZ GAME</span>
+      </div>
+      <div class="work-body">
+        <p class="work-title">QUIZROOM</p>
+        <p class="work-desc">ルームコードひとつで遊べるクイズ大会Webアプリ。ホストの進行に参加者の画面が自動で同期する。</p>
+        <div class="work-tags">
+          <span class="work-tag work-tag-engine">LARAVEL 12</span><span class="work-tag">PHP</span><span class="work-tag">MARIADB</span><span class="work-tag">WEB</span><span class="work-tag">MULTI</span>
+        </div>
+      </div>
+      <!-- ▼自信のあるコードスニペット（モーダルに表示されます） -->
+      <script type="text/plain" class="work-code-source">// Room.php（抜粋）── 自動進行ロジック（ポーリングのたびに呼び出される）
+public function autoAdvanceIfNeeded(): void
+{
+    if ($this->status === 'in_progress') {
+        // 現在の問題を取得
+        $question = $this->quiz->questions
+            ->firstWhere('order_no', $this->current_question_order);
+
+        // このルームの参加者だけに絞って回答数を数える
+        // （過去ルームの回答まで数えて「全員回答」と誤判定する不具合の対策）
+        $ids = $this->participants()->pluck('id');
+        $answered = $question->answers()
+            ->whereIn('participant_id', $ids)->count();
+
+        // 出題開始からの経過秒数
+        // （Carbonのバージョン差で負の値になるのを避けるため、timestamp同士の引き算に統一）
+        $started = $this->current_question_started_at;
+        $elapsed = $started ? now()->timestamp - $started->timestamp : 0;
+        $timeUp = $elapsed >= $question->time_limit_seconds;
+        $allAnswered = $answered >= $ids->count();
+
+        // 時間切れ or 全員回答 → 結果発表へ
+        if ($timeUp || $allAnswered) {
+            $this->update(['status' => 'result']);
+        }
+    } elseif ($this->status === 'result') {
+        // 結果発表から5秒経ったら自動で次へ
+        $sec = now()->timestamp - $this->updated_at->timestamp;
+        if ($sec >= 5) {
+            // ...（次の問題へ／最後の問題なら finished へ遷移する処理は省略）
+        }
+    }
+}</script>
+    </div>
+
+    <!-- 3. BOMBER ARENA -->
     <div class="work-card" data-tags="2d solo"
       data-title="BOMBER ARENA"
       data-badge="COMPLETE" data-badge-class="badge-done"
@@ -282,7 +365,7 @@ private void Move()
       </div>
     </div>
 
-    <!-- 3. FLYING BIRD -->
+    <!-- 4. FLYING BIRD -->
     <div class="work-card" data-tags="2d solo"
       data-title="FLYING BIRD"
       data-badge="COMPLETE" data-badge-class="badge-done"
@@ -309,7 +392,7 @@ private void Move()
       </div>
     </div>
 
-    <!-- 4. 避けるんデス -->
+    <!-- 5. 避けるんデス -->
     <div class="work-card" data-tags="2d team"
       data-title="避けるんデス"
       data-badge="TEAM" data-badge-class="badge-team"
@@ -335,7 +418,7 @@ private void Move()
       </div>
     </div>
 
-    <!-- 5. ケガレの館 -->
+    <!-- 6. ケガレの館 -->
     <div class="work-card" data-tags="2d team"
       data-title="ケガレの館"
       data-badge="TEAM" data-badge-class="badge-team"
@@ -361,7 +444,7 @@ private void Move()
       </div>
     </div>
 
-    <!-- 6. Xevious -->
+    <!-- 7. Xevious -->
     <div class="work-card" data-tags="2d team"
       data-title="XEVIOUS"
       data-badge="TEAM" data-badge-class="badge-team"
@@ -465,8 +548,8 @@ private void Move()
       const thumbWrap = document.getElementById('modal-thumb-wrap');
       if (youtube) {
         thumbWrap.innerHTML = `
-          <iframe width="100%" height="250" 
-            src="https://www.youtube.com/embed/${youtube}" 
+          <iframe width="100%" height="250"
+            src="https://www.youtube.com/embed/${youtube}"
             frameborder="0" allowfullscreen>
           </iframe>
         `;
@@ -579,6 +662,7 @@ private void Move()
     if (e.key === 'Escape') closeModal();
   });
 </script>
+<script src="./js/works-extra.js"></script>
 
 </body>
 </html>
