@@ -1,0 +1,352 @@
+/* css/works-extra.css
+   作品モーダルの拡張スタイル。style.css は変更せず、後から読み込んで機能を足す。
+     ・画像ギャラリー（#modal-gallery）
+     ・ルーム状態遷移図（#modal-flow）
+   読み込み順：style.css → works-extra.css
+*/
+
+/* ==========================================
+   画像ギャラリー（data-gallery があるカードだけ表示）
+   ========================================== */
+#modal-gallery {
+  display: none;                  /* JS が data-gallery を見つけたときだけ block にする */
+  position: relative;
+  background: #05070d;
+  border-bottom: 3px solid var(--px-cyan);
+  padding: 44px 16px 16px;        /* 上は CLOSE ボタンの高さぶん空ける */
+}
+
+#modal-gallery::before {
+  content: '// SCREENSHOTS';
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--px-green);
+  letter-spacing: 1px;
+}
+
+/* 画像エリア */
+.mg-stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* 画像を囲む枠（クリックで原寸表示） */
+.mg-frame {
+  display: block;
+  line-height: 0;
+  max-width: 100%;
+  background: #fff;
+  border: 3px solid var(--px-cyan);
+  box-shadow: 4px 4px 0 var(--px-blue);
+  cursor: pointer;
+}
+
+.mg-img {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+}
+
+/* 前へ／次へ */
+.mg-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 48px;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--px-white);
+  background: rgba(0, 0, 0, 0.75);
+  border: 2px solid var(--px-cyan);
+  cursor: pointer;
+  z-index: 2;
+}
+
+.mg-prev { left: -6px; }
+.mg-next { right: -6px; }
+
+.mg-nav:hover {
+  background: var(--px-cyan);
+  color: var(--px-black);
+}
+
+/* 説明文（番号つき） */
+.mg-caption {
+  margin-top: 16px;
+  min-height: 3.6em;              /* 1〜2行で高さが跳ねないように */
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #90a4ae;
+}
+
+.mg-count {
+  display: inline-block;
+  margin-right: 10px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--px-yellow);
+  vertical-align: 1px;
+}
+
+/* サムネイル列 */
+.mg-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.mg-thumb {
+  width: 76px;
+  height: 46px;
+  padding: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid var(--px-blue);
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity .15s, border-color .15s;
+}
+
+.mg-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+
+.mg-thumb:hover { opacity: 0.85; }
+
+.mg-thumb.active {
+  opacity: 1;
+  border-color: var(--px-cyan);
+}
+
+/* ==========================================
+   ルーム状態遷移図（data-flow があるカードだけ表示）
+   ========================================== */
+#modal-flow {
+  display: none;                  /* JS が data-flow を見つけたときだけ block にする */
+  margin-bottom: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(0,229,255,0.2);
+}
+
+#modal-flow-title {
+  margin-bottom: 16px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--px-green);
+  letter-spacing: 1px;
+}
+
+/* 状態（4つ）と矢印（3つ）を横一列に並べる。
+   列幅の比率（1.2 : 0.8）は、下のループ矢印の位置計算にも使っている */
+.flow-row {
+  display: grid;
+  grid-template-columns: 1.2fr .8fr 1.2fr .8fr 1.2fr .8fr 1.2fr;
+  align-items: center;
+}
+
+.flow-node {
+  padding: 10px 4px;
+  text-align: center;
+  background: rgba(0,229,255,0.06);
+  border: 2px solid var(--flow-color, var(--px-cyan));
+  box-shadow: 3px 3px 0 var(--px-blue);
+}
+
+.flow-code {
+  display: block;
+  margin-bottom: 6px;
+  font-family: var(--font-pixel);
+  font-size: 7px;
+  color: var(--flow-color, var(--px-cyan));
+  word-break: break-all;
+}
+
+.flow-jp {
+  display: block;
+  font-size: 11px;
+  color: var(--px-white);
+}
+
+/* 状態ごとの色（waiting → in_progress → result → finished） */
+.flow-n1 { --flow-color: var(--px-cyan); }
+.flow-n2 { --flow-color: var(--px-green); }
+.flow-n3 { --flow-color: var(--px-yellow); }
+.flow-n4 { --flow-color: var(--px-orange); }
+
+/* 矢印（上に遷移条件のラベル、下に線） */
+.flow-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+}
+
+.flow-arrow span {
+  margin-bottom: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  text-align: center;
+  color: #90a4ae;
+}
+
+.flow-arrow i {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: var(--px-cyan);
+}
+
+.flow-arrow i::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -4px;
+  border-left: 7px solid var(--px-cyan);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* 結果発表 → 出題中に戻るループ矢印（2番目と3番目の状態の中心のあいだ） */
+.flow-loop {
+  position: relative;
+  height: 52px;
+}
+
+.flow-loop-line {
+  position: absolute;
+  top: 0;
+  left: 36.1%;                    /* 2番目の状態の中心 = 2.6 / 7.2 */
+  width: 27.8%;                   /* 3番目の中心(4.6 / 7.2)までの幅 */
+  height: 18px;
+  border: 2px dashed var(--px-green);
+  border-top: none;
+}
+
+.flow-loop-line::before {         /* 出題中へ向かう矢じり（上向き） */
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 8px solid var(--px-green);
+}
+
+.flow-loop-label {
+  position: absolute;
+  top: 24px;
+  left: 22%;
+  width: 56%;
+  font-size: 10px;
+  text-align: center;
+  color: #90a4ae;
+}
+
+.flow-note {
+  font-size: 11.5px;
+  line-height: 1.8;
+  color: #78909c;
+}
+
+/* ==========================================
+   コードスニペット（#modal-code）
+   style.css にこの部分の規則が無く、長い行がモーダルの外へはみ出していたので、
+   ここで見た目を整える。横スクロールはコード欄の中だけで起こる。
+   ========================================== */
+#modal-code {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(0,229,255,0.2);
+}
+
+#modal-code-title {
+  margin-bottom: 12px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  color: var(--px-green);
+  letter-spacing: 1px;
+}
+
+#modal-code-block {
+  overflow-x: auto;
+  background: #05070d;
+  border: 1px solid rgba(0,229,255,0.25);
+  border-left: 3px solid var(--px-cyan);
+}
+
+#modal-code-pre {
+  margin: 0;
+  padding: 14px 16px;
+  font-family: Consolas, Menlo, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: #b0bec5;
+  tab-size: 4;
+}
+
+/* ==========================================
+   レスポンシブ（スマホ）
+   ========================================== */
+@media (max-width: 600px) {
+  #modal-gallery { padding: 44px 12px 14px; }
+  .mg-img { max-height: 220px; }
+  .mg-prev { left: -4px; }
+  .mg-next { right: -4px; }
+
+  /* 遷移図は縦並びにする */
+  .flow-row { grid-template-columns: 1fr; }
+
+  .flow-arrow {
+    flex-direction: row;
+    gap: 10px;
+    padding: 8px 0;
+  }
+
+  .flow-arrow span {
+    margin: 0;
+    text-align: right;
+    flex: 1;
+  }
+
+  .flow-arrow i {
+    flex: none;
+    width: 2px;
+    height: 20px;
+    margin-right: calc(50% - 1px); /* 状態ボックスの中央あたりに線を寄せる */
+  }
+
+  .flow-arrow i::after {          /* 下向きの矢じりに変更 */
+    right: auto;
+    left: -4px;
+    top: auto;
+    bottom: -1px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--px-cyan);
+    border-bottom: none;
+  }
+
+  /* ループ矢印は線を消して、文章だけ残す */
+  .flow-loop { height: auto; margin-top: 10px; }
+  .flow-loop-line { display: none; }
+  .flow-loop-label {
+    position: static;
+    width: auto;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+}
