@@ -263,42 +263,6 @@
 }
 
 /* ==========================================
-   コードスニペット（#modal-code）
-   style.css にこの部分の規則が無く、長い行がモーダルの外へはみ出していたので、
-   ここで見た目を整える。横スクロールはコード欄の中だけで起こる。
-   ========================================== */
-#modal-code {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px dashed rgba(0,229,255,0.2);
-}
-
-#modal-code-title {
-  margin-bottom: 12px;
-  font-family: var(--font-pixel);
-  font-size: 8px;
-  color: var(--px-green);
-  letter-spacing: 1px;
-}
-
-#modal-code-block {
-  overflow-x: auto;
-  background: #05070d;
-  border: 1px solid rgba(0,229,255,0.25);
-  border-left: 3px solid var(--px-cyan);
-}
-
-#modal-code-pre {
-  margin: 0;
-  padding: 14px 16px;
-  font-family: Consolas, Menlo, 'Courier New', monospace;
-  font-size: 12px;
-  line-height: 1.7;
-  color: #b0bec5;
-  tab-size: 4;
-}
-
-/* ==========================================
    レスポンシブ（スマホ）
    ========================================== */
 @media (max-width: 600px) {
