@@ -155,6 +155,10 @@
             <div class="table-cell">ENGINE&IDE</div>
             <div class="table-cell">Unity / Unreal Engine 4 / Visual Studio / VS Code / GitHub</div>
           </div>
+          <div class="table-row">
+            <div class="table-cell">BACKEND</div>
+            <div class="table-cell">Laravel 12 / MariaDB / DB設計 / API設計 / 外部API連携</div>
+          </div>
         </div>
         <h3>CERTIFICATIONS</h3>
         <div class="table-grid">
@@ -202,11 +206,12 @@
     <button class="filter-btn" data-filter="team">TEAM</button>
     <button class="filter-btn" data-filter="2d">2D</button>
     <button class="filter-btn" data-filter="3d">3D</button>
-    <button class="filter-btn" data-filter="web">WEB</button>
+    <button class="filter-btn" data-filter="web">WEB / BACKEND</button>
     <button class="filter-btn" data-filter="wip">制作中</button>
   </div>
 
-  <div class="works-grid reveal" id="works-grid">
+  <!-- ★ PICK UP：カード＋動画の2カラム（動画IDは、カードの data-youtube が使われます） -->
+  <div class="works-feature reveal" id="works-feature">
 
     <!-- 1. MACHINA PARTY（★目玉作品） -->
     <div class="work-card work-card-featured" data-tags="3d team wip"
@@ -220,7 +225,7 @@
       data-appeals="InputReaderを独自実装し、KB・ゲームパッドの複数入力に対応|TankManagerで最大4人のプレイヤー・CPU管理を一元化|コンポーネント分離による再利用しやすいシステム設計|カメラ基準移動とチャージショットシステムを実装"
       data-pdf="pdf/MachinaParty_Program.pdf"
       data-github="https://github.com/Yoshinko45/MACHINA_PARTY/tree/main/Assets/Scripts/Yoshimi"
-      data-youtube="1IOwmItIAJI"> <!-- ★ここにYouTube動画IDを反映 -->
+      data-youtube="1IOwmItIAJI"> <!-- ★YouTube動画ID（ここを変えると、先頭の動画と詳細ウィンドウの動画の両方が変わります） -->
       <span class="featured-ribbon">★ PICK UP</span>
       <span class="work-badge badge-wip">制作中</span>
       <div class="work-thumb">
@@ -233,6 +238,7 @@
         <div class="work-tags">
           <span class="work-tag work-tag-engine">UNITY 6</span><span class="work-tag">3D</span><span class="work-tag">MULTI</span><span class="work-tag">PARTY</span><span class="work-tag">INPUT SYSTEM</span>
         </div>
+        <span class="work-cta">▶ 詳細を見る</span>
       </div>
       <!-- ▼自信のあるコードスニペット（モーダルに表示されます） -->
       <script type="text/plain" class="work-code-source">// TankMovement.cs（抜粋）── カメラ基準移動（ゲームパッド / TPS風操作）
@@ -276,6 +282,20 @@ private void Move()
 }</script>
     </div>
 
+    <!-- 動画（IDは左のカードの data-youtube から自動で入ります） -->
+    <div class="feature-video" id="feature-video">
+      <p class="feature-video-head"><span>▶ PLAY MOVIE</span><span>MACHINA PARTY</span></p>
+      <div class="feature-video-frame" id="feature-video-frame"></div>
+      <div class="feature-video-note">
+        <p>気になったら、カードをクリック（タップ）すると、担当箇所・コード・資料PDFが開きます。</p>
+        <a class="feature-video-link" href="https://www.youtube.com/watch?v=1IOwmItIAJI" target="_blank" rel="noopener">YouTubeで開く ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="works-grid reveal" id="works-grid">
+
     <!-- 2. QUIZROOM（Webアプリ・個人制作） -->
     <div class="work-card" data-tags="web solo"
       data-title="QUIZROOM"
@@ -284,8 +304,8 @@ private void Move()
       data-label="WEB QUIZ GAME"
       data-desc="ルームコードひとつで集まって遊べるクイズ大会Webアプリ。ホストの進行に合わせて参加者の画面が切り替わり、回答の速さがスコアに反映される。授業課題として、設計→開発→テストの全工程を一人で担当。"
       data-platform="Web" data-lang="PHP / SQL" data-engine="Laravel 12" data-period="2026年（授業課題）"
-      data-tags-display="LARAVEL 12,PHP,MARIADB,WEB,MULTI,OPENTDB API"
-      data-appeals="企画〜設計〜実装〜テスト〜ドキュメント整備まで一人で担当（設計書8種／単体テスト29件＋結合テスト7件）|WebSocketを使わず、数秒おきのポーリングとroomsのstatus管理だけでホスト・参加者の画面を同期|全員回答・時間切れ・結果発表5秒後を条件に、ホスト操作なしで進む自動進行ロジックを実装|正誤＋回答速度でスコアを算出し、問題ごとの暫定順位・最終ランキングを表示|OpenTDB APIで問題を取得し、無料翻訳API（MyMemory）で日本語化して保存。タイムアウト時は2回まで自動で再試行|過去ルームの回答まで数えて即「全員回答」と誤判定する不具合を、原因を切り分けて解消"
+      data-tags-display="LARAVEL 12,BACKEND,PHP,MARIADB,WEB,MULTI,OPENTDB API"
+      data-appeals="企画〜設計〜実装〜テスト〜ドキュメント整備まで一人で担当（設計書8種／単体テスト29件＋結合テスト7件）|バックエンド（Laravel）の設計・実装が中心：DB設計（7テーブル）、ルート／API設計（全21ルート：API 14＋画面表示 7）、ルームのステータス管理・採点処理を担当|WebSocketを使わず、数秒おきのポーリングとroomsのstatus管理だけでホスト・参加者の画面を同期|全員回答・時間切れ・結果発表5秒後を条件に、ホスト操作なしで進む自動進行ロジックを実装|正誤＋回答速度でスコアを算出し、問題ごとの暫定順位・最終ランキングを表示|OpenTDB APIで問題を取得し、無料翻訳API（MyMemory）で日本語化して保存。タイムアウト時は2回まで自動で再試行|過去ルームの回答まで数えて即「全員回答」と誤判定する不具合を、原因を切り分けて解消"
       data-gallery="image/QuizRoom_01_quizlist.png|image/QuizRoom_02_room.png|image/QuizRoom_03_waiting.png|image/QuizRoom_04_sync.png|image/QuizRoom_05_result.png|image/QuizRoom_06_final.png"
       data-gallery-captions="HOST｜マイクイズ一覧。自作クイズとOpenTDB取得クイズを管理し、ここからルームを作成|HOST｜ルーム作成・待機。発行したルームコードを共有すると、入室した参加者が一覧に自動で反映される|PLAYER｜待機画面。ニックネームとルームコードだけで入室（アカウント不要）。自分の名前はハイライト表示|HOST × PLAYER｜出題中。タイマー付きで両方の画面が同時に進行（左：ホスト／右：参加者）|PLAYER｜結果画面。正誤・獲得スコア（回答速度込み）・暫定ランキングを表示|HOST × PLAYER｜最終結果。ホストは全員のランキング、参加者は自分の順位とスコアを表示"
       data-flow="room-status"
@@ -299,7 +319,7 @@ private void Move()
         <p class="work-title">QUIZROOM</p>
         <p class="work-desc">ルームコードひとつで遊べるクイズ大会Webアプリ。ホストの進行に参加者の画面が自動で同期する。</p>
         <div class="work-tags">
-          <span class="work-tag work-tag-engine">LARAVEL 12</span><span class="work-tag">PHP</span><span class="work-tag">MARIADB</span><span class="work-tag">WEB</span><span class="work-tag">MULTI</span>
+          <span class="work-tag work-tag-engine">LARAVEL 12</span><span class="work-tag work-tag-backend">BACKEND</span><span class="work-tag">PHP</span><span class="work-tag">MARIADB</span><span class="work-tag">WEB</span><span class="work-tag">MULTI</span>
         </div>
       </div>
       <!-- ▼自信のあるコードスニペット（モーダルに表示されます） -->
