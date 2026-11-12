@@ -1,4 +1,8 @@
 // js/works-extra.js
+// WORKS まわりの拡張機能。
+//   ・WORKS 先頭の「カード＋動画」（このファイルの末尾）
+//   ・作品モーダルの拡張（ギャラリー／状態遷移図）
+//
 // 作品モーダルの拡張機能。
 // index.html にあるモーダル処理（カードをクリックすると中身を差し込む処理）はそのまま使い、
 // それより後に実行されて「ギャラリー」と「状態遷移図」を足す。
@@ -125,4 +129,53 @@
     if (e.key === 'ArrowRight') show(current + 1);
     if (e.key === 'ArrowLeft')  show(current - 1);
   });
+})();
+
+
+// ==========================================
+// WORKS 先頭の「カード ＋ 動画」
+//   ・動画IDは、カード（.work-card-featured）の data-youtube をそのまま使う。
+//     → IDを変えるのは index.html のカード1か所だけ（詳細ウィンドウの動画も同じIDを使う）
+//   ・フィルターでカードが隠れたら、横の動画も一緒に隠す
+//   ・どのカードでも、押して詳細ウィンドウが開くときは先頭の動画を止める（音の二重再生を防ぐ）
+// ==========================================
+(function () {
+  const feature = document.getElementById('works-feature');
+  const box     = document.getElementById('feature-video');
+  const frame   = document.getElementById('feature-video-frame');
+  if (!feature || !box || !frame) return;
+
+  const card = feature.querySelector('.work-card');
+  if (!card) return;
+
+  const id = (card.dataset.youtube || '').trim();
+
+  if (id) {
+    const player = document.createElement('iframe');
+    player.src = 'https://www.youtube.com/embed/' + encodeURIComponent(id) + '?rel=0';
+    player.title = (card.dataset.title || '作品') + ' の動画';
+    player.setAttribute('loading', 'lazy');
+    player.setAttribute('allow', 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    player.setAttribute('referrerpolicy', 'strict-origin-when-cross-origin');
+    player.setAttribute('allowfullscreen', '');
+    frame.appendChild(player);
+
+    // 「YouTubeで開く」リンクも同じIDにそろえる
+    const link = box.querySelector('.feature-video-link');
+    if (link) link.href = 'https://www.youtube.com/watch?v=' + encodeURIComponent(id);
+
+    // 詳細ウィンドウが開くとき、先頭の動画を止める（読み込み直すと再生が止まる。再生ボタンでまた見られる）
+    document.querySelectorAll('.work-card').forEach(c => {
+      c.addEventListener('click', () => { player.src = player.src; });
+    });
+  } else {
+    // 動画IDが無いときは、カードだけを表示する
+    box.style.display = 'none';
+    feature.classList.add('no-video');
+  }
+
+  // フィルター連動（main.js がカードに付け外しする .hidden を見て、動画ごと隠す）
+  const sync = () => feature.classList.toggle('is-hidden', card.classList.contains('hidden'));
+  new MutationObserver(sync).observe(card, { attributes: true, attributeFilter: ['class'] });
+  sync();
 })();
