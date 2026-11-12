@@ -1,5 +1,6 @@
 /* css/works-extra.css
-   作品モーダルの拡張スタイル。style.css は変更せず、後から読み込んで機能を足す。
+   WORKS まわりの拡張スタイル。style.css は変更せず、後から読み込んで機能を足す。
+     ・WORKS 先頭の「カード＋動画」の2カラム（.works-feature）
      ・画像ギャラリー（#modal-gallery）
      ・ルーム状態遷移図（#modal-flow）
    読み込み順：style.css → works-extra.css
@@ -313,4 +314,184 @@
     margin-bottom: 10px;
     text-align: left;
   }
+}
+
+
+/* ==========================================
+   WORKS 先頭：PICK UP（カード ＋ 動画の2カラム）
+   ・横長のバナーに見えていた MACHINA PARTY のカードを、正方形に近い縦型カードにする
+   ・右に動画を置いて、カードを押さなくても最初から動画が見られるようにする
+   ・動画IDは index.html のカード（data-youtube）を js/works-extra.js が読み取って使う
+   ========================================== */
+.works-feature {
+  display: grid;
+  grid-template-columns: minmax(340px, 5fr) minmax(0, 7fr);   /* カード : 動画 = 5 : 7 */
+  gap: 28px;
+  align-items: stretch;           /* 左右の高さをそろえる */
+  max-width: 1100px;              /* .works-grid と同じ幅 */
+  margin: 0 auto 28px;
+}
+
+.works-feature.no-video {         /* 動画IDが無いときはカードだけ */
+  grid-template-columns: minmax(0, 520px);
+  justify-content: center;
+}
+
+.works-feature.is-hidden {        /* フィルターでカードが隠れたら、動画も隠す */
+  display: none;
+}
+
+/* ---------- 左：カード ---------- */
+.works-feature .work-card-featured {
+  grid-column: auto;              /* style.css の「1 / -1（横いっぱい）」を打ち消す */
+  display: flex;
+  flex-direction: column;
+}
+
+.works-feature .work-card-featured .work-thumb {
+  flex: none;
+  height: auto;                   /* style.css の固定の高さ(320px)をやめて、画像の比率(16:9)に合わせる */
+  aspect-ratio: 16 / 9;
+}
+
+.works-feature .work-card-featured .work-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 22px 24px 24px;
+}
+
+.works-feature .work-card-featured .work-title {
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.works-feature .work-card-featured .work-desc {
+  font-size: 13px;
+}
+
+.works-feature .work-card-featured .work-tags {
+  margin-bottom: 20px;
+}
+
+/* 「押せる」ことが、マウスを載せなくても分かるボタン */
+.work-cta {
+  display: block;
+  margin-top: auto;               /* カードの一番下に寄せる */
+  padding: 12px 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  color: var(--px-black);
+  background: var(--px-yellow);
+  box-shadow: 4px 4px 0 var(--px-blue);
+  transition: transform .1s, box-shadow .1s;
+}
+
+.work-card:hover .work-cta {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--px-blue);
+}
+
+/* ---------- 右：動画 ---------- */
+.feature-video {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--px-card);
+  border: 3px solid var(--px-yellow);
+  box-shadow: 0 0 18px rgba(255, 225, 53, 0.25), 6px 6px 0 var(--px-blue);
+}
+
+.feature-video-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--px-black);
+  background: var(--px-yellow);
+}
+
+.feature-video-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.feature-video-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.feature-video-note {
+  flex: 1;                        /* 左のカードのほうが背が高いとき、余った高さをここで吸収する */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  font-size: 12.5px;
+  line-height: 1.8;
+  color: #90a4ae;
+}
+
+.feature-video-note p {
+  margin: 0;
+}
+
+.feature-video-link {
+  flex: none;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--px-cyan);
+  text-decoration: none;
+}
+
+.feature-video-link:hover {
+  text-decoration: underline;
+}
+
+/* ---------- 画面が狭いとき：縦に並べる（動画を先に見せる） ---------- */
+@media (max-width: 960px) {
+  .works-feature {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 720px;
+  }
+
+  .feature-video {
+    order: -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .works-feature .work-card-featured .work-body {
+    padding: 18px 18px 20px;
+  }
+
+  .feature-video-note {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+/* ==========================================
+   タグ：バックエンド（QUIZROOM など）を目立たせる
+   ========================================== */
+.work-tag-backend {
+  background: rgba(57, 255, 20, 0.12);
+  border: 1px solid var(--px-green);
+  color: var(--px-green);
+  font-weight: bold;
 }
